@@ -13,7 +13,7 @@ TODO
 //=================================================
 // init variables
 int MUXsignal = A0; 
-int value = 0; int valueIndex = 0; int mappedValue;
+int value = 0; int valueIndex = 0; int mappedValue; int numOfSensors = 192;
 int printDescription = true;
 int S[4] = {5,6,7,8};
 int MUXtable[16][4]=
@@ -23,7 +23,7 @@ int MUXtable[16][4]=
   {0,0,0,1}, {1,0,0,1}, {0,1,0,1}, {1,1,0,1},
   {0,0,1,1}, {1,0,1,1}, {0,1,1,1}, {1,1,1,1}
 };
-int values[192];
+int values[numOfSensors];
 
 //=================================================
 // setups
@@ -91,9 +91,9 @@ void readSensorsMultipleMUX()
 
 void printValues(int array[])
 {
-  for (int arrayLength = 0; arrayLength < 192; arrayLength++)
+  for (int i = 0; i < numOfSensors; i++)
   {
-    Serial.println(array[arrayLength]);
+    Serial.println(array[i]);
   }
 }
 
