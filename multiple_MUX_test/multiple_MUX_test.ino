@@ -13,8 +13,8 @@ TODO
 //=================================================
 // init variables
 int MUXsignal = A0; 
-int value = 0; int mappedValue;
-int printTrue = true;
+int value = 0; int valueIndex = 0; int mappedValue;
+int printDescription = true;
 int S[4] = {5,6,7,8};
 int MUXtable[16][4]=
 {
@@ -23,6 +23,7 @@ int MUXtable[16][4]=
   {0,0,0,1}, {1,0,0,1}, {0,1,0,1}, {1,1,0,1},
   {0,0,1,1}, {1,0,1,1}, {0,1,1,1}, {1,1,1,1}
 };
+int values[192];
 
 //=================================================
 // setups
@@ -39,7 +40,7 @@ void setup()
 // loop
 void loop()
 {
-  readSensors();
+  readSensorsMultipleMUX();
   
   Serial.println();
 
@@ -56,7 +57,7 @@ void selection(int j)
   digitalWrite(S[3], MUXtable[j][3]);
 }
 
-void readSensors()
+void readSensorsSingleMUX()
 {
   for(int MUXchannel=0; MUXchannel<16; MUXchannel++)
   {
@@ -65,27 +66,48 @@ void readSensors()
     value = analogRead(MUXsignal);
     mappedValue = map(value,410,500,0,100);
   
-    printValues(printTrue, MUXchannel, value);
+    printValue(printDescription, MUXchannel, value);
+
+
   }
 }
 
-void readMultipleMUX()
+void readSensorsMultipleMUX()
 {
-  readSensors();
+  valueIndex = 0;
+
+  for(int MUXchannel=0; MUXchannel<16; MUXchannel++)
+  {
+    selection(MUXchannel);
+    
+    for(int MUXindex=0; MUXindex<12; MUXindex++)
+    {
+      values[valueIndex] = analogRead(MUXsignal);
+      valueIndex += 1;      
+    }
+  }
+  printValues(values);
 }
 
-void serialToMAXMSP()
+void printValues(int array[])
 {
-  
+  for (int arrayLength = 0; arrayLength < 192; arrayLength++)
+  {
+    Serial.println(array[arrayLength]);
+  }
 }
 
-void printValues(bool printTrue, int MUXchannelNumber, int value)
+void printValue(bool printDescription, int MUXchannelNumber, int value)
 {
-  if(printTrue==true)
+  if(printDescription==true)
   {
     Serial.print(MUXchannelNumber);
     Serial.print(": ");
     Serial.print(value);
     Serial.print("| ");
+  }
+  else
+  {
+    Serial.println(value);
   }
 }
