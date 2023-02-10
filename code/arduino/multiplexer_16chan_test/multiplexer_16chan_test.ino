@@ -15,7 +15,7 @@ TODO
 int MUXsignal = A0; 
 int value = 0; int mappedValue;
 int printTrue = true;
-int S[4] = {5,6,7,8};
+int S[4] = {22,24,26,28};
 int MUXtable[16][4]=
 {
   {0,0,0,0}, {1,0,0,0}, {0,1,0,0}, {1,1,0,0},
@@ -52,7 +52,7 @@ void selection(int j)
 { 
   digitalWrite(S[0], MUXtable[j][0]);
   digitalWrite(S[1], MUXtable[j][1]);
-  digitalWrite(S[2], MUXtable[j][2]);
+  digitalWrite(S[2], MUXtable[j][2]);••••••••••
   digitalWrite(S[3], MUXtable[j][3]);
 }
 
@@ -63,7 +63,7 @@ void readSensors()
     selection(MUXchannel);
     
     value = analogRead(MUXsignal);
-    mappedValue = map(value,410,500,0,100);
+    mappedValue = map(value,400,550,-120,80);
     
     printValues(printTrue, MUXchannel, value);
   }
