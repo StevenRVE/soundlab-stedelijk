@@ -1,21 +1,3 @@
-#include "Filter.h"
-#include "ArduinoTimer.h" // for periodic measurement
-
-// the <float> makes a filter for float numbers
-// 20 is the weight (20 => 20%)
-// 0 is the initial value of the filter
-ExponentialFilter<float> FilteredSensor0(20, 0);
-ExponentialFilter<float> FilteredSensor1(20, 0);
-ExponentialFilter<float> FilteredSensor2(20, 0);
-ExponentialFilter<float> FilteredSensor3(20, 0);
-ExponentialFilter<float> FilteredSensor4(20, 0);
-ExponentialFilter<float> FilteredSensor5(20, 0);
-ExponentialFilter<float> FilteredSensor6(20, 0);
-ExponentialFilter<float> FilteredSensor7(20, 0);
-ExponentialFilter<float> FilteredSensor8(20, 0);
-ExponentialFilter<float> FilteredSensor9(20, 0);
-
-
 float       distance, duration;
 const int   echo1=2, echo2=3, echo3=4, echo4=5, echo5=6, echo6=7, echo7=8, echo8=9, echo9=10, echo10=11;
 const int   trigger1=12, trigger2=13, trigger3=14, trigger4=15, trigger5=16, trigger6=17, trigger7=18, trigger8=19, trigger9=20, trigger10=21;
@@ -51,11 +33,6 @@ void setup(){
     pinMode(trigger8,OUTPUT);
     pinMode(trigger9,OUTPUT);
     pinMode(trigger10,OUTPUT);  
-
-    //   // initialize all the readings to 0:
-    // for (int thisReading = 0; thisReading < numReadings; thisReading++) {
-    //     readings[thisReading] = 0;
-    // }  
 }
 
 void loop()
@@ -87,12 +64,12 @@ void readSensor(int echoPin, int triggerPin, int sensorNumber)
     distance  = duration*340/2/10000;
     if (distance < 2 || distance > 450){        // Checking whether measured value is within the permissible distance
         // Serial.println("distance is outside of the measuring range");   // If not, an error message is output
-        Serial.print(120);
-        Serial.print(",");
+        Serial.println(120);
+        // Serial.print(",");
     }
     else{
         // Serial.println("distance sensor " + String(sensorNumber) + ": " + String(distance) + " cm");    // The calculated distance is output to the console
         Serial.print(distance);
-        Serial.print(",");
+        // Serial.print(",");
     }
 }

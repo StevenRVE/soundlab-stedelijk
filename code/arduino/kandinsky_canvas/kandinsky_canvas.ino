@@ -1,22 +1,13 @@
-//16-Channel MUX (74HC4067) Interface
-//=================================================
-/*
-TODO
-- make functions to make code more readable
--- function to save highest and lowest value for mapping function
-*/
-
 //=================================================
 // init variables
 const int numberOfSensors = 192;
 const int numberOfMUX = 12;
 const int numberOfChannels = 16;
 
-int MUXsignal = A0; 
 int value = 0; 
-int valueIndex = 0; int mappedValue = 0;
-int printDescription = true;
+int valueIndex = 0;
 
+int MUXsignal[12] = {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11};
 int S[4] = {22,24,26,28};
 int inputValuesArray[numberOfSensors];
 int sortedByChannelArray[numberOfSensors];
@@ -34,11 +25,26 @@ int MUXtable[16][4]=
 // setups
 void setup()
 {
-  Serial.begin(9600);
-  
-  pinMode(MUXsignal,INPUT);
+  Serial.begin(38400);
+
+  for(int mux=0; mux<numberOfMUX; mux++) pinMode(MUXsignal[mux],INPUT);
   
   for(int i=0; i<4; i++) pinMode(S[i],OUTPUT);
+}
+
+//=================================================
+// loop
+void loop()
+{
+  readSensorsMultipleMUX();
+
+  sortByChannel(inputValuesArray);
+
+  sortByRow(sortedByChannelArray);
+  
+  printValuesFromArray(sortedByRowArray);
+
+  delay(2);
 }
 
 //=================================================
@@ -56,17 +62,16 @@ void readSensorsMultipleMUX()
   // set valueIndex to 0 
   valueIndex = 0;
 
-  // for loop going through all the 16 MUX channels
+  // for loop going through all the 12 MUX channels
   for(int channel=0; channel<numberOfChannels; channel++)
   {
     // update the channel for all the MUXs
     selection(channel);
     
-    // read the hall effect sensordata for all the 16 MUXs going through the channels one by one
+    // read the hall effect sensordata for all the 12 MUXs going through the MUXs one by one
     for(int mux=0; mux<numberOfMUX; mux++)
     {
-      // write the sensor value to the inputValuesArray array using the the valueIndex for the position in the array
-      inputValuesArray[valueIndex++] = analogRead(MUXsignal);   
+        inputValuesArray[valueIndex++] = analogRead(MUXsignal[mux]);
     }
   }
 }
@@ -109,26 +114,12 @@ void sortByRow(int array[])
 
 void printValuesFromArray(int array[])
 {
-  // print A at beginning of list
-  Serial.println("A");
-
-  for (int arrayIndex = 0; arrayIndex < numberOfSensors; arrayIndex++)
-  {
-    Serial.println(array[arrayIndex]);
-  }
-}
-
-//=================================================
-// loop
-void loop()
-{
-  readSensorsMultipleMUX();
-
-  sortByChannel(inputValuesArray);
-
-  sortByRow(sortedByChannelArray);
-  
-  printValuesFromArray(sortedByRowArray);
-
-  delay(20);
+    for (int arrayIndex = 0; arrayIndex < numberOfSensors; arrayIndex++)
+    {
+        Serial.print(arrayIndex);
+        Serial.print(" ");
+        Serial.print(array[arrayIndex]);
+        Serial.print(" "); 
+        Serial.println();
+    }
 }

@@ -12,9 +12,8 @@ TODO
 
 //=================================================
 // init variables
-int MUXsignal = A0; 
-int value = 0; int mappedValue;
-int printTrue = true;
+int MUXsignal = A3; 
+int value = 0;
 int S[4] = {22,24,26,28};
 int MUXtable[16][4]=
 {
@@ -28,7 +27,7 @@ int MUXtable[16][4]=
 // setups
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(38400);
   
   pinMode(MUXsignal,INPUT);
   
@@ -52,7 +51,7 @@ void selection(int j)
 { 
   digitalWrite(S[0], MUXtable[j][0]);
   digitalWrite(S[1], MUXtable[j][1]);
-  digitalWrite(S[2], MUXtable[j][2]);••••••••••
+  digitalWrite(S[2], MUXtable[j][2]);
   digitalWrite(S[3], MUXtable[j][3]);
 }
 
@@ -63,19 +62,15 @@ void readSensors()
     selection(MUXchannel);
     
     value = analogRead(MUXsignal);
-    mappedValue = map(value,400,550,-120,80);
     
-    printValues(printTrue, MUXchannel, value);
+    printValues(MUXchannel, value);
   }
 }
 
-void printValues(bool printTrue, int MUXchannelNumber, int value)
+void printValues(int MUXchannelNumber, int value)
 {
-  if(printTrue==true)
-  {
-    Serial.print(MUXchannelNumber);
-    Serial.print(": ");
+    // Serial.print(MUXchannelNumber);
+    // Serial.print(": ");
     Serial.print(value);
-    Serial.print("| ");
-  }
+    Serial.print(",");
 }
